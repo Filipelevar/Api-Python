@@ -43,7 +43,10 @@ def get_characters():
 
     limit = 20
 
-    query = Character.query.filter(Character.name.ilike(f'{name_filter}%'))
+    query = Character.query
+    if name_filter:
+        query = query.filter(Character.name.ilike(f'{name_filter}%'))
+
     characters = query.limit(limit).offset((page - 1) * limit).all()
 
     character_schema = CharacterSchema(many=True)
