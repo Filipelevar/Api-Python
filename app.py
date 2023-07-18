@@ -2,8 +2,14 @@ from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 
+import os
+from dotenv import load_dotenv
+
+
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:filipe1020@localhost:5432/RickandMorty'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_URL')
+
+print(app.config['SQLALCHEMY_DATABASE_URI'])
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
@@ -36,18 +42,17 @@ class CharacterSchema(ma.SQLAlchemyAutoSchema):
         model = Character
 
 
-@app.route('/characters', methods=['GET'])
+@app.route('/search', methods=['GET'])
 def get_characters():
     page = int(request.args.get('page', 1))
-    name_filter = request.args.get('name', '')
+    nameSearch = request.args.get('name', '')
 
     limit = 20
 
-    query = Character.query
-    if name_filter:
-        query = query.filter(Character.name.ilike(f'{name_filter}%'))
-
-    characters = query.limit(limit).offset((page - 1) * limit).all()
+    characters = Character.query.filter(Character.name.ilike(f'%{nameSearch.lower()}%')) \
+        .limit(limit) \
+        .offset((page - 1) * limit) \
+        .all()
 
     character_schema = CharacterSchema(many=True)
     result = character_schema.dump(characters)
