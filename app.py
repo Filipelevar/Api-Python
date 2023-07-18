@@ -4,12 +4,10 @@ from flask_marshmallow import Marshmallow
 
 import os
 from dotenv import load_dotenv
-
+load_dotenv()
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_URL')
-
-print(app.config['SQLALCHEMY_DATABASE_URI'])
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DB_URL")
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
