@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+from flask_cors import CORS
 
 import os
 from dotenv import load_dotenv
@@ -8,6 +9,7 @@ load_dotenv()
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DB_URL")
+CORS(app)
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
