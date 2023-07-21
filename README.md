@@ -1,3 +1,8 @@
+How to use the API
+in the URL put some value in front of the Name to perform the Search
+
+
+
 steps taken
 
 1 - pip install flask
