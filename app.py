@@ -9,7 +9,8 @@ load_dotenv()
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DB_URL")
-CORS(app)
+CORS(app, resources={
+     "*": {"origins": ["https://react-to-api-python.vercel.app/"]}})
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
