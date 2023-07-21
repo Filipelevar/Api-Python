@@ -9,8 +9,7 @@ load_dotenv()
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DB_URL")
-CORS(app, resources={
-     "*": {"origins": ["https://react-to-api-python.vercel.app", "http://localhost:3000"]}})
+CORS(app)
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
@@ -50,6 +49,11 @@ def get_characters():
 
     limit = 20
 
+    total_characters = Character.query.filter(
+        Character.name.ilike(f'%{nameSearch.lower()}%')).count()
+
+    total_pages = (total_characters - 1) // limit + 1
+
     characters = Character.query.filter(Character.name.ilike(f'%{nameSearch.lower()}%')) \
         .limit(limit) \
         .offset((page - 1) * limit) \
@@ -60,9 +64,9 @@ def get_characters():
 
     return jsonify({
         'characters': result,
-        'total_pages': len(characters) // limit + 1,
+        'total_pages': total_pages,
         'current_page': page,
-        'total_items': len(characters)
+        'total_items': min(total_characters, limit)
     })
 
 

@@ -1,1 +1,5 @@
 .env
+venv
+backupdb
+**/__pycache__
+.vscode

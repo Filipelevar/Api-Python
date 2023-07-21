@@ -7,7 +7,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:filipe1020@localh
 db = SQLAlchemy(app)
 
 
-class Characters(db.Model):
+class Character(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     status = db.Column(db.String(200))
@@ -34,7 +34,9 @@ def welcome():
     with open('C:\\Users\\Filipe Costa Levar\\Desktop\\Eitree Academy\\jsontoimport.json', encoding='utf-8-sig') as file:
         characters_data = json.load(file)
 
-    for character in characters_data:
+    sorted_characters = sorted(characters_data, key=lambda x: x["id"])
+
+    for character in sorted_characters:
         name = character['name']
         status = character['status']
         species = character['species']
@@ -44,8 +46,8 @@ def welcome():
         location_name = character['location']['name']
         image = character['image']
 
-        char = Characters(name, status, species, type, gender,
-                          origin_name, location_name, image)
+        char = Character(name, status, species, type, gender,
+                         origin_name, location_name, image)
 
         db.session.add(char)
 
