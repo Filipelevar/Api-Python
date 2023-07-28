@@ -3,3 +3,4 @@ venv
 backupdb
 **/__pycache__
 .vscode
+.StepsTakes
